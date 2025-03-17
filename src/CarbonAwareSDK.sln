@@ -57,6 +57,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonAware.DataSources.Ele
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonAware.DataSources.ElectricityMapsFree.Mocks", "CarbonAware.DataSources\CarbonAware.DataSources.ElectricityMapsFree\mock\CarbonAware.DataSources.ElectricityMapsFree.Mocks.csproj", "{A7B0EF32-5AF3-4E56-AE88-627CC99BE635}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CarbonAware.DataSources", "CarbonAware.DataSources", "{C1ED622A-DAAA-4642-8B56-811F041BA7F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CarbonAware.DataSources.Entsoe", "CarbonAware.DataSources.Entsoe", "{35A0B523-7961-47DC-8536-E2AEEEC9BE75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonAware.DataSources.Entsoe", "CarbonAware.DataSources\CarbonAware.DataSources.Entsoe\src\CarbonAware.DataSources.Entsoe.csproj", "{FA6351B1-D2A4-4F85-BA50-930A03049AED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,11 +177,19 @@ Global
 		{52100C22-4F79-4498-B413-B93C68A599C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52100C22-4F79-4498-B413-B93C68A599C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52100C22-4F79-4498-B413-B93C68A599C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA6351B1-D2A4-4F85-BA50-930A03049AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA6351B1-D2A4-4F85-BA50-930A03049AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA6351B1-D2A4-4F85-BA50-930A03049AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA6351B1-D2A4-4F85-BA50-930A03049AED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4143259C-BA5F-43E7-A7E9-7B3AAF3E20B0}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35A0B523-7961-47DC-8536-E2AEEEC9BE75} = {C1ED622A-DAAA-4642-8B56-811F041BA7F2}
+		{FA6351B1-D2A4-4F85-BA50-930A03049AED} = {35A0B523-7961-47DC-8536-E2AEEEC9BE75}
 	EndGlobalSection
 EndGlobal

@@ -1,58 +1,81 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "buildWebApi",
+      "label": "clean (functions)",
       "command": "dotnet",
-      "type": "process",
       "args": [
-          "build",
-          "${workspaceFolder}/src/CarbonAware.WebApi/src/CarbonAware.WebApi.csproj",
-          "/property:GenerateFullPaths=true",
-          "/consoleloggerparameters:NoSummary"
+        "clean",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
       ],
-      "problemMatcher": "$msCompile"
+      "type": "process",
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/samples/azure/azure-function"
+      }
     },
     {
-      "label": "buildCLI",
+      "label": "build (functions)",
       "command": "dotnet",
-      "type": "process",
       "args": [
-          "build",
-          "${workspaceFolder}/src/CarbonAware.CLI/src/CarbonAware.CLI.csproj",
-          "/property:GenerateFullPaths=true",
-          "/consoleloggerparameters:NoSummary"
+        "build",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
       ],
-      "problemMatcher": "$msCompile"
+      "type": "process",
+      "dependsOn": "clean (functions)",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/samples/azure/azure-function"
+      }
     },
-    { 
-      "label": ".NET Core Test with debugger", 
-      "type": "process", 
-      "isBackground": true, 
-      "command": "dotnet", 
-      "args": [ 
-        "test",
-        "CarbonAwareSDK.sln"
-      ], 
-      "options": 
-          { 
-              "cwd": "${workspaceFolder}/src/", 
-              "env": 
-              { 
-                  "VSTEST_HOST_DEBUG": "1" 
-              }, 
-          }, 
-      "group": "test", 
-      "presentation": 
-          { 
-              "echo": true,
-              "reveal": "always",
-              "focus": false,
-              "panel": "shared"
-          },
-      "problemMatcher": [] 
+    {
+      "label": "clean release (functions)",
+      "command": "dotnet",
+      "args": [
+        "clean",
+        "--configuration",
+        "Release",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "type": "process",
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/samples/azure/azure-function"
+      }
+    },
+    {
+      "label": "publish (functions)",
+      "command": "dotnet",
+      "args": [
+        "publish",
+        "--configuration",
+        "Release",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "type": "process",
+      "dependsOn": "clean release (functions)",
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/samples/azure/azure-function"
+      }
+    },
+    {
+      "type": "func",
+      "dependsOn": "build (functions)",
+      "options": {
+        "cwd": "${workspaceFolder}/samples/azure/azure-function/bin/Debug/net8.0"
+      },
+      "command": "host start",
+      "isBackground": true,
+      "problemMatcher": "$func-dotnet-watch"
     }
   ]
 }

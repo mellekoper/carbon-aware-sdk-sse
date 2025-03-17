@@ -1,60 +1,11 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
     {
-      "name": ".NET Core Launch (console)",
+      "name": "Attach to .NET Functions",
       "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "buildCLI",
-      "program": "${workspaceFolder}/src/CarbonAware.CLI/src/bin/Debug/net8.0/caw.dll",
-      "args": [
-        "emissions",
-        "--location", "${input:caw_location}"
-      ],
-      "cwd": "${workspaceFolder}/src/CarbonAware.CLI/src/",
-      "stopAtEntry": true,
-      "console": "integratedTerminal",
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-    },
-    {
-      "name": ".NET Core Launch (web)",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "buildWebApi",
-      "program": "${workspaceFolder}/src/CarbonAware.WebApi/src/bin/Debug/net8.0/CarbonAware.WebApi.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/src/CarbonAware.WebApi/src/",
-      "stopAtEntry": false,
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-        "uriFormat": "%s/swagger"
-      },
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "sourceFileMap": {
-        "/Views": "${workspaceFolder}/Views"
-      }
-    },
-    {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach"
-    }
-  ],
-  "inputs": [
-    {
-      "id": "caw_location",
-      "type": "promptString",
-      "description": "--location VALUE",
-      "default": "eastus"
+      "request": "attach",
+      "processId": "${command:azureFunctions.pickProcess}"
     }
   ]
 }
