@@ -8,11 +8,11 @@ namespace CarbonAware.DataSources.Entsoe;
 /*
 macOS/Linux I think:
 export DataSources__EmissionsDataSource="Entsoe"
-export DataSources__Configurations__EntsoE__ApiKey="YOUR_ENTSOE_API_KEY"
+export DataSources__Configurations__Entsoe__ApiKey="YOUR_ENTSOE_API_KEY"
 
 Powershell:
 $env:DataSources__EmissionsDataSource="Entsoe"
-$env:DataSources__Configurations__EntsoE__ApiKey="<YOUR_ENTSOE_API_KEY>"
+$env:DataSources__Configurations__Entsoe__ApiKey="<YOUR_ENTSOE_API_KEY>"
 */
 
 internal class EntsoeDataSource : IEmissionsDataSource

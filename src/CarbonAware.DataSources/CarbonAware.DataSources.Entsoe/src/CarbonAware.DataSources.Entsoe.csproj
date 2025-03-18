@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- <InternalsVisibleTo Include="CarbonAware.DataSources.EntsoE.Mocks" /> -->
-    <!-- <InternalsVisibleTo Include="CarbonAware.DataSources.EntsoE.Tests" /> -->
+    <!-- <InternalsVisibleTo Include="CarbonAware.DataSources.Entsoe.Mocks" /> -->
+    <!-- <InternalsVisibleTo Include="CarbonAware.DataSources.Entsoe.Tests" /> -->
     <InternalsVisibleTo Include="CarbonAware.DataSources.Registration" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
