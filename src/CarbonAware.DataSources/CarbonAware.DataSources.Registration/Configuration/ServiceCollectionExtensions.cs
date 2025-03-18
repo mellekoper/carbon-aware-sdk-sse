@@ -4,6 +4,7 @@ using CarbonAware.DataSources.ElectricityMaps.Configuration;
 using CarbonAware.DataSources.ElectricityMapsFree.Configuration;
 using CarbonAware.DataSources.Json.Configuration;
 using CarbonAware.DataSources.WattTime.Configuration;
+using CarbonAware.DataSources.Entsoe.Configuration;
 using CarbonAware.Exceptions;
 using CarbonAware.Proxies.Cache;
 using Microsoft.Extensions.Configuration;

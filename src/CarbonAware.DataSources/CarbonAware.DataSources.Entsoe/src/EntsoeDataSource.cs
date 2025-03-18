@@ -6,8 +6,13 @@ using Microsoft.Extensions.Logging;
 namespace CarbonAware.DataSources.Entsoe;
 
 /*
-DataSources__EmissionsDataSource="Entsoe"
-DataSources__Configurations__EntsoE__ApiKey="YOUR_ENTSOE_API_KEY"
+macOS/Linux I think:
+export DataSources__EmissionsDataSource="Entsoe"
+export DataSources__Configurations__EntsoE__ApiKey="YOUR_ENTSOE_API_KEY"
+
+Powershell:
+$env:DataSources__EmissionsDataSource="Entsoe"
+$env:DataSources__Configurations__EntsoE__ApiKey="<YOUR_ENTSOE_API_KEY>"
 */
 
 internal class EntsoeDataSource : IEmissionsDataSource
@@ -21,16 +26,27 @@ internal class EntsoeDataSource : IEmissionsDataSource
         _logger = logger;
     }
 
-    public async Task<IEnumerable<EmissionsData>> GetCarbonIntensityAsync(IEnumerable<Location> locations, DateTimeOffset startTime, DateTimeOffset endTime)
+    public async Task<IEnumerable<EmissionsData>> GetCarbonIntensityAsync(IEnumerable<Location> locations, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime)
     {
         var emissionsData = new List<EmissionsData>();
 
         foreach (var location in locations)
         {
             string eicCode = ConvertLocationToEIC(location.Name);
-            var data = await _client.GetEmissionsDataAsync(eicCode, startTime, endTime);
+            var data = await _client.GetEmissionsDataAsync(eicCode, periodStartTime, periodEndTime);
             emissionsData.AddRange(data);
         }
+
+        return emissionsData;
+    }
+
+    public async Task<IEnumerable<EmissionsData>> GetCarbonIntensityAsync(Location location, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime)
+    {
+        var emissionsData = new List<EmissionsData>();
+
+        string eicCode = ConvertLocationToEIC(location.Name);
+        var data = await _client.GetEmissionsDataAsync(eicCode, periodStartTime, periodEndTime);
+        emissionsData.AddRange(data);
 
         return emissionsData;
     }

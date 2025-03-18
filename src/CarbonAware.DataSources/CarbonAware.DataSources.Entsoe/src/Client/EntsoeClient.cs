@@ -1,5 +1,6 @@
 using CarbonAware.Model;
 using CarbonAware.DataSources.Entsoe.Configuration;
+using CarbonAware.DataSources.Entsoe.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Globalization;
