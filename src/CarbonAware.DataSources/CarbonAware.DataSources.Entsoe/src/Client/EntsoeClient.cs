@@ -34,7 +34,7 @@ internal class EntsoeClient : IEntsoeClient
 
         // TODO: Maybe change this later!!
         string requestUrl = $"{_configuration.BaseUrl}?documentType=A71&processType=A01" +
-                            $"&in_Domain={eicCode}" +
+                            $"&outBiddingZone_Domain={eicCode}" +
                             $"&periodStart={formattedStartTime}&periodEnd={formattedEndTime}" +
                             $"&securityToken={_configuration.ApiKey}";
 
