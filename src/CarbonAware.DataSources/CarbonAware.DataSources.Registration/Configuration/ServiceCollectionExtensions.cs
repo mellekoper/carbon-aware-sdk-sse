@@ -42,6 +42,11 @@ internal static class ServiceCollectionExtensions
                 services.AddElectricityMapsFreeEmissionsDataSource(dataSources);
                 break;
             }
+            case DataSourceType.Entsoe:
+            {
+                services.AddEntsoeEmissionsDataSource(dataSources);
+                break;
+            }
             case DataSourceType.None:
             {
                 services.TryAddSingleton<IEmissionsDataSource, NullEmissionsDataSource>();
@@ -70,6 +75,10 @@ internal static class ServiceCollectionExtensions
             case DataSourceType.ElectricityMapsFree:
             {
                 throw new ArgumentException("ElectricityMapsFree data source is not supported for forecast data");
+            }
+            case DataSourceType.Entsoe:
+            {
+                throw new ArgumentException("Not yet implemented");
             }
             case DataSourceType.None:
             {

@@ -1,42 +1,95 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using CarbonAware.Interfaces;
+using CarbonAware.Model;
+using CarbonAware.DataSources.Entsoe.Client;
+using Microsoft.Extensions.Logging;
 
-namespace CarbonAware.DataSources.Entsoe
+namespace CarbonAware.DataSources.Entsoe;
+
+/*
+DataSources__EmissionsDataSource="Entsoe"
+DataSources__Configurations__EntsoE__ApiKey="YOUR_ENTSOE_API_KEY"
+*/
+
+internal class EntsoeDataSource : IEmissionsDataSource
 {
-    internal class EntsoeDataSource
+    private readonly EntsoeClient _client;
+    private readonly ILogger<EntsoeDataSource> _logger;
+
+    public EntsoeDataSource(EntsoeClient client, ILogger<EntsoeDataSource> logger)
     {
-        private readonly ILogger<EntsoeDataSource> _logger;
-        private readonly HttpClient _httpClient;
-        private readonly string _apiKey;
-        private readonly string _baseUrl = "https://web-api.tp.entsoe.eu/api";
+        _client = client;
+        _logger = logger;
+    }
 
-        public EntsoeDataSource(ILogger<EntsoeDataSource> logger, HttpClient httpClient, IConfiguration configuration)
+    public async Task<IEnumerable<EmissionsData>> GetCarbonIntensityAsync(IEnumerable<Location> locations, DateTimeOffset startTime, DateTimeOffset endTime)
+    {
+        var emissionsData = new List<EmissionsData>();
+
+        foreach (var location in locations)
         {
-            _logger = logger;
-            _httpClient = httpClient;
-            _apiKey = configuration["Data:Configurations:Entsoe:ApiKey"];
+            string eicCode = ConvertLocationToEIC(location.Name);
+            var data = await _client.GetEmissionsDataAsync(eicCode, startTime, endTime);
+            emissionsData.AddRange(data);
         }
 
-        public async Task<XDocument> FetchCongestionDataAsync(string inDomain, string outDomain, string periodStart, string periodEnd)
+        return emissionsData;
+    }
+
+    private string ConvertLocationToEIC(string locationName)
+    {
+        var eicCodes = new Dictionary<string, string>
         {
-            var url = $"{_baseUrl}?securityToken={_apiKey}&documentType=A44&in_Domain={inDomain}&out_Domain={outDomain}&periodStart={periodStart}&periodEnd={periodEnd}";
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return XDocument.Parse(content);
+            { "Estonia", "10Y1001A1001A39I" },
+            { "Denmark", "10Y1001A1001A65H" },
+            { "Germany", "10Y1001A1001A83F" },
+            { "United Kingdom", "10Y1001A1001A92E" },
+            { "Malta", "10Y1001A1001A93C" },
+            { "Moldova", "10Y1001A1001A990" },
+            { "Armenia", "10Y1001A1001B004" },
+            { "Georgia", "10Y1001A1001B012" },
+            { "Azerbaijan", "10Y1001A1001B05V" },
+            { "Ukraine", "10Y1001C--00003F" },
+            { "Kosovo", "10Y1001C--00100H" },
+            { "Albania", "10YAL-KESH-----5" },
+            { "Austria", "10YAT-APG------L" },
+            { "Bosnia and Herzegovina", "10YBA-JPCC-----D" },
+            { "Belgium", "10YBE----------2" },
+            { "Bulgaria", "10YCA-BULGARIA-R" },
+            { "Switzerland", "10YCH-SWISSGRIDZ" },
+            { "Serbia", "10YCS-CG-TSO---S" },
+            { "Cyprus", "10YCY-1001A0003J" },
+            { "Czech Republic", "10YCZ-CEPS-----N" },
+            { "Spain", "10YES-REE------0" },
+            { "Finland", "10YFI-1--------U" },
+            { "France", "10YFR-RTE------C" },
+            { "Greece", "10YGR-HTSO-----Y" },
+            { "Croatia", "10YHR-HEP------M" },
+            { "Hungary", "10YHU-MAVIR----U" },
+            { "Ireland", "10YIE-1001A00010" },
+            { "Italy", "10YIT-GRTN-----B" },
+            { "Lithuania", "10YLT-1001A0008Q" },
+            { "Luxembourg", "10YLU-CEGEDEL-NQ" },
+            { "Latvia", "10YLV-1001A00074" },
+            { "North Macedonia", "10YMK-MEPSO----8" },
+            { "Netherlands", "10YNL----------L" },
+            { "Norway", "10YNO-0--------C" },
+            { "Poland", "10YPL-AREA-----S" },
+            { "Portugal", "10YPT-REN------W" },
+            { "Romania", "10YRO-TEL------P" },
+            { "Sweden", "10YSE-1--------K" },
+            { "Slovenia", "10YSI-ELES-----O" },
+            { "Slovakia", "10YSK-SEPS-----K" },
+            { "Turkey", "10YTR-TEIAS----W" },
+            { "Belarus", "BY" },
+            { "Iceland", "IS" },
+            { "Russia", "RU" }
+        };
+
+        if (eicCodes.TryGetValue(locationName, out string eicCode))
+        {
+            return eicCode;
         }
 
-        public async Task<XDocument> FetchGenerationDataAsync(string inDomain, string periodStart, string periodEnd)
-        {
-            var url = $"{_baseUrl}?securityToken={_apiKey}&documentType=A75&processType=A16&in_Domain={inDomain}&periodStart={periodStart}&periodEnd={periodEnd}";
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return XDocument.Parse(content);
-        }
+        throw new ArgumentException($"Unknown location: {locationName}");
     }
 }

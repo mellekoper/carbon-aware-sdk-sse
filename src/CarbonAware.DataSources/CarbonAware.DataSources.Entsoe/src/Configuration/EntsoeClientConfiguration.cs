@@ -1,14 +1,35 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using CarbonAware.Exceptions;
 
-namespace CarbonAware.DataSources.Entsoe.Configuration
+namespace CarbonAware.DataSources.Entsoe.Configuration;
+
+/// <summary>
+/// A configuration class for holding ENTSO-E client config values.
+/// </summary>
+internal class EntsoeClientConfiguration
 {
-    public static class ServiceCollectionExtensions
+    /// <summary>
+    /// ENTSO-E API Key
+    /// </summary>
+    public string ApiKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Base URL for ENTSO-E API
+    /// </summary>
+    public string BaseUrl { get; set; } = "https://web-api.tp.entsoe.eu/api";
+
+    /// <summary>
+    /// Validate that this object is properly configured.
+    /// </summary>
+    public void Validate()
     {
-        public static void AddEntsoeDataSource(this IServiceCollection services)
+        if (!Uri.IsWellFormedUriString(this.BaseUrl, UriKind.Absolute))
         {
-            services.AddHttpClient<EntsoeDataSource>();
-            services.TryAddSingleton<EntsoeDataSource>();
+            throw new ConfigurationException($"{nameof(this.BaseUrl)} is not a valid absolute URL.");
+        }
+
+        if (string.IsNullOrWhiteSpace(this.ApiKey))
+        {
+            throw new ConfigurationException("ENTSO-E API key is required.");
         }
     }
 }
