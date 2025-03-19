@@ -17,10 +17,10 @@ $env:DataSources__Configurations__Entsoe__ApiKey="<YOUR_ENTSOE_API_KEY>"
 
 internal class EntsoeDataSource : IEmissionsDataSource
 {
-    private readonly EntsoeClient _client;
-    private readonly ILogger<EntsoeDataSource> _logger;
+    private IEntsoeClient _client;
+    private ILogger<EntsoeDataSource> _logger;
 
-    public EntsoeDataSource(EntsoeClient client, ILogger<EntsoeDataSource> logger)
+    public EntsoeDataSource(IEntsoeClient client, ILogger<EntsoeDataSource> logger)
     {
         _client = client;
         _logger = logger;
