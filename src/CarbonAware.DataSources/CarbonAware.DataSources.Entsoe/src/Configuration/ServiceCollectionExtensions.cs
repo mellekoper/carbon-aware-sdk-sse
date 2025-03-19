@@ -1,7 +1,7 @@
 using CarbonAware.Configuration;
 using CarbonAware.Interfaces;
 using CarbonAware.DataSources.Entsoe.Client;
-using CarbonAware.DataSources.Entsoe.Configuration;
+// using CarbonAware.DataSources.Entsoe.Configuration;
 using CarbonAware.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +15,10 @@ namespace CarbonAware.DataSources.Entsoe.Configuration;
 /// </summary>
 internal static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddEntsoeEmissionsDataSource(this IServiceCollection services, DataSourcesConfiguration dataSourcesConfig)
+    public static IServiceCollection AddEntsoeCongestionDataSource(this IServiceCollection services, DataSourcesConfiguration dataSourcesConfig)
     {
-        AddEntsoeClient(services, dataSourcesConfig.EmissionsConfigurationSection());
-        services.TryAddSingleton<IEmissionsDataSource, EntsoeDataSource>();
+        AddEntsoeClient(services, dataSourcesConfig.CongestionFigurationSection());
+        services.TryAddSingleton<ICongestionDataSource, EntsoeDataSource>();
         return services;
     }
 

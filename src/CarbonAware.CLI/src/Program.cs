@@ -2,6 +2,7 @@
 using CarbonAware.CLI.Commands.Emissions;
 using CarbonAware.CLI.Commands.EmissionsForecasts;
 using CarbonAware.CLI.Commands.Location;
+using CarbonAware.CLI.Commands.Congestion;
 using CarbonAware.CLI.Common;
 using CarbonAware.CLI.Extensions;
 using GSF.CarbonAware.Configuration;
@@ -48,6 +49,17 @@ catch (CarbonAwareException e)
     Environment.Exit(1);
 }
 
+try
+{
+    builder.AddCongestionServices(config);
+}
+catch (CarbonAwareException e)
+{
+    var _logger = builder.BuildServiceProvider().GetService<ILogger<Program>>();
+    _logger?.LogError(e, "Failed to create congestion services.");
+    Environment.Exit(1);
+}
+
 var serviceProvider = builder.BuildServiceProvider();
 
 var rootCommand = new RootCommand(description: CommonLocalizableStrings.RootCommandDescription);
@@ -55,6 +67,7 @@ rootCommand.AddGlobalOption(CommonOptions.VerboseOption);
 rootCommand.AddCommand(new EmissionsCommand());
 rootCommand.AddCommand(new EmissionsForecastsCommand());
 rootCommand.AddCommand(new LocationsCommand());
+rootCommand.AddCommand(new CongestionCommand());
 
 var parser = new CommandLineBuilder(rootCommand)
     .UseDefaults()

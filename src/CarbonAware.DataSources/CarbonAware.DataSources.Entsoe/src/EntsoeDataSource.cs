@@ -7,15 +7,15 @@ namespace CarbonAware.DataSources.Entsoe;
 
 /*
 macOS/Linux I think:
-export DataSources__EmissionsDataSource="Entsoe"
+export DataSources__CongestionDataSource="Entsoe"
 export DataSources__Configurations__Entsoe__ApiKey="YOUR_ENTSOE_API_KEY"
 
 Powershell:
-$env:DataSources__EmissionsDataSource="Entsoe"
+$env:DataSources__CongestionDataSource="Entsoe"
 $env:DataSources__Configurations__Entsoe__ApiKey="<YOUR_ENTSOE_API_KEY>"
 */
 
-internal class EntsoeDataSource : IEmissionsDataSource
+internal class EntsoeDataSource : ICongestionDataSource
 {
     private IEntsoeClient _client;
     private ILogger<EntsoeDataSource> _logger;
@@ -26,29 +26,29 @@ internal class EntsoeDataSource : IEmissionsDataSource
         _logger = logger;
     }
 
-    public async Task<IEnumerable<EmissionsData>> GetCarbonIntensityAsync(IEnumerable<Location> locations, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime)
+    public async Task<IEnumerable<CongestionData>> GetCongestionAsync(IEnumerable<Location> locations, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime)
     {
-        var emissionsData = new List<EmissionsData>();
+        List<CongestionData> congestionData = new List<CongestionData>();
 
         foreach (var location in locations)
         {
             string eicCode = ConvertLocationToEIC(location.Name);
-            var data = await _client.GetEmissionsDataAsync(eicCode, periodStartTime, periodEndTime);
-            emissionsData.AddRange(data);
+            var data = await _client.GetCongestionDataAsync(eicCode, location.Name, periodStartTime, periodEndTime);
+            congestionData.AddRange(data);
         }
 
-        return emissionsData;
+        return congestionData;
     }
 
-    public async Task<IEnumerable<EmissionsData>> GetCarbonIntensityAsync(Location location, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime)
+    public async Task<IEnumerable<CongestionData>> GetCongestionAsync(Location location, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime)
     {
-        var emissionsData = new List<EmissionsData>();
+        List<CongestionData> congestionData = new List<CongestionData>();
 
         string eicCode = ConvertLocationToEIC(location.Name);
-        var data = await _client.GetEmissionsDataAsync(eicCode, periodStartTime, periodEndTime);
-        emissionsData.AddRange(data);
+        var data = await _client.GetCongestionDataAsync(eicCode, location.Name, periodStartTime, periodEndTime);
+        congestionData.AddRange(data);
 
-        return emissionsData;
+        return congestionData;
     }
 
     private string ConvertLocationToEIC(string locationName)

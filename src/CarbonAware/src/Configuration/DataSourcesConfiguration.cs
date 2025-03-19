@@ -8,6 +8,8 @@ internal class DataSourcesConfiguration
     #nullable enable
     public string? EmissionsDataSource { get; set; }
     public string? ForecastDataSource { get; set; }
+
+    public string? CongestionDataSource { get; set; }
     public IConfigurationSection? ConfigurationSection { get; set; }
     #nullable disable
 
@@ -29,6 +31,11 @@ internal class DataSourcesConfiguration
         return GetConfigurationType(ForecastDataSource);
     }
 
+    public string CongestionConfigurationType()
+    {
+        return GetConfigurationType(CongestionDataSource);
+    }
+
     /// <summary>
     /// Gets the entire configuration object associated with EmissionsDataSource setting. 
     /// </summary>
@@ -47,6 +54,10 @@ internal class DataSourcesConfiguration
         return GetConfigurationSection(ForecastDataSource);
     }
 
+    public IConfigurationSection CongestionFigurationSection()
+    {
+        return GetConfigurationSection(CongestionDataSource);
+    }
     /// <summary>
     /// Asserts that specified data sources have an associated configuration.
     /// </summary>
@@ -61,6 +72,11 @@ internal class DataSourcesConfiguration
         if (!string.IsNullOrEmpty(ForecastDataSource) && !ConfigurationSectionContainsKey(ForecastDataSource))
         {
             throw new ArgumentException($"Forecast data source value '{ForecastDataSource}' was not found in 'Configurations'");
+        }
+
+        if (!string.IsNullOrEmpty(CongestionDataSource) && !ConfigurationSectionContainsKey(CongestionDataSource))
+        {
+            throw new ArgumentException($"Congestion data source value '{CongestionDataSource}' was not found in 'Configurations'");
         }
     }
 

@@ -10,5 +10,7 @@ internal interface ICongestionDataSource
     /// <param name="periodStartTime">The start time of the period.</param>
     /// <param name="periodEndTime">The end time of the period.</param>
     /// <returns>A list of emissions data for the given time period.</returns>
-    Task<IEnumerable<EmissionsData>> GetCongestionAsync(Location location, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime);
+    Task<IEnumerable<CongestionData>> GetCongestionAsync(IEnumerable<Location> location, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime);
+
+    Task<IEnumerable<CongestionData>> GetCongestionAsync(Location location, DateTimeOffset periodStartTime, DateTimeOffset periodEndTime);
 }

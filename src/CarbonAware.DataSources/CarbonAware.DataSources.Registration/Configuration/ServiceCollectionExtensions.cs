@@ -45,7 +45,7 @@ internal static class ServiceCollectionExtensions
             }
             case DataSourceType.Entsoe:
             {
-                services.AddEntsoeEmissionsDataSource(dataSources);
+                services.AddEntsoeCongestionDataSource(dataSources);
                 break;
             }
             case DataSourceType.None:

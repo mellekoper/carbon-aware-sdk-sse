@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Emit;
 using System.Text.Json.Serialization;
 
 namespace CarbonAware.Model;
@@ -370,6 +371,28 @@ internal static class CarbonAwareOptimalEmission
         if (bestResult != null)
         {
             results = emissionsData.Where(x => x.Rating == bestResult.Rating);
+        }
+
+        return results;
+    }
+}
+
+internal static class CarbonAwareOptimalCongestion
+{
+    public static IEnumerable<global::CarbonAware.Model.CongestionData> GetOptimalCongestion(IEnumerable<global::CarbonAware.Model.CongestionData> congestionData)
+    {
+        if (!congestionData.Any())
+        {
+            return Array.Empty<global::CarbonAware.Model.CongestionData>();
+        }
+
+        var bestResult = congestionData.MaxBy(x => x.Difference);
+
+        IEnumerable<global::CarbonAware.Model.CongestionData> results = Array.Empty<global::CarbonAware.Model.CongestionData>();
+
+        if (bestResult != null)
+        {
+            results = congestionData.Where(x => x.Difference == bestResult.Difference);
         }
 
         return results;

@@ -7,5 +7,5 @@ public enum DataSourceType
     JSON,
     ElectricityMaps,
     ElectricityMapsFree,
-    Entsoe
+    Entsoe,
 }

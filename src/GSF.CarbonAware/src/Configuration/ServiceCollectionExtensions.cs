@@ -60,4 +60,13 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<ILocationHandler, LocationHandler>();
         return services;
     }
+
+    public static IServiceCollection AddCongestionServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        AddLocationService(services, configuration);
+        services.AddDataSourceService(configuration);
+        services.TryAddSingleton<ICongestionHandler, CongestionHandler>();
+        services.TryAddSingleton<ILocationHandler, LocationHandler>();
+        return services;
+    }
 }

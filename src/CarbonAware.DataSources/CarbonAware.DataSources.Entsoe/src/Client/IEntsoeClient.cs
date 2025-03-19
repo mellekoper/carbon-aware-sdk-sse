@@ -13,11 +13,11 @@ internal interface IEntsoeClient
     public const string NamedClient = "EntsoeClient";
 
     /// <summary>
-    /// Retrieves observed emission data for a given EIC code over a specified time period.
+    /// Retrieves observed congestion data for a given EIC code over a specified time period.
     /// </summary>
     /// <param name="eicCode">EIC code representing the grid region</param>
     /// <param name="startTime">Start time for query</param>
     /// <param name="endTime">End time for query</param>
-    /// <returns>A <see cref="Task{IEnumerable{EmissionsData}}"/> containing emissions data points.</returns>
-    Task<IEnumerable<EmissionsData>> GetEmissionsDataAsync(string eicCode, DateTimeOffset startTime, DateTimeOffset endTime);
+    /// <returns>A <see cref="Task{IEnumerable{CongestionData}}"/> containing congestions data points.</returns>
+    Task<IEnumerable<CongestionData>> GetCongestionDataAsync(string eicCode, string country, DateTimeOffset startTime, DateTimeOffset endTime);
 }
