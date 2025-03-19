@@ -32,14 +32,19 @@ namespace CarbonAware.DataSources.Entsoe.Client;
 
         public async Task<IEnumerable<EmissionsData>> GetEmissionsDataAsync(string eicCode, DateTimeOffset startTime, DateTimeOffset endTime)
         {
-            var formattedStartTime = startTime.ToUniversalTime().ToString("yyyyMMddHHmm", CultureInfo.InvariantCulture);
-            var formattedEndTime = endTime.ToUniversalTime().ToString("yyyyMMddHHmm", CultureInfo.InvariantCulture);
+            // var formattedStartTime = startTime.ToUniversalTime().ToString("yyyyMMddHHmm", CultureInfo.InvariantCulture);
+            // var formattedEndTime = endTime.ToUniversalTime().ToString("yyyyMMddHHmm", CultureInfo.InvariantCulture);
+            var formattedStartTime = "202501192300";
+            var formattedEndTime = "202501262300";
 
             string requestUrl = $"{_configuration.BaseUrl}?documentType=A71&processType=A01" +
-                                $"&outBiddingZone_Domain={eicCode}" +
+                                $"&in_Domain={eicCode}" +
                                 $"&periodStart={formattedStartTime}&periodEnd={formattedEndTime}" +
                                 $"&securityToken={_configuration.ApiKey}";
-
+            string requestUrl2 = "https://web-api.tp.entsoe.eu/api?documentType=A71&processType=A01&in_Domain=10Y1001A1001A65H&periodStart=202501192300&periodEnd=202501262300&securityToken=dd4684d5-ed6a-44f9-bad3-5c0d2def3831";
+            
+            Console.WriteLine(requestUrl);
+            Console.WriteLine(requestUrl2);
             _log.LogInformation("Fetching data from ENTSO-E: {requestUrl}", requestUrl);
 
             HttpResponseMessage response = await _client.GetAsync(requestUrl);
