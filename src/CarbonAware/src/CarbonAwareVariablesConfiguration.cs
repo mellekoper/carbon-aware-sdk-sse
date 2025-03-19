@@ -27,6 +27,8 @@ internal class CarbonAwareVariablesConfiguration
     /// </summary>
     public string EmissionsDataSource { get; set; } = string.Empty;
 
+    public string CongestionDataSource { get; set; } = string.Empty;
+
 #nullable enable
     /// <summary>
     /// Gets or sets proxy information for making calls to the internet.

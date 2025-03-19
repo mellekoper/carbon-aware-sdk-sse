@@ -20,6 +20,7 @@ internal static class ServiceCollectionExtensions
 
         var emissionsDataSource = GetDataSourceTypeFromValue(dataSources.EmissionsConfigurationType());
         var forecastDataSource = GetDataSourceTypeFromValue(dataSources.ForecastConfigurationType());
+        var congestionDataSource = GetDataSourceTypeFromValue(dataSources.CongestionConfigurationType());
 
         switch (emissionsDataSource)
         {
@@ -41,11 +42,6 @@ internal static class ServiceCollectionExtensions
             case DataSourceType.ElectricityMapsFree:
             {
                 services.AddElectricityMapsFreeEmissionsDataSource(dataSources);
-                break;
-            }
-            case DataSourceType.Entsoe:
-            {
-                services.AddEntsoeCongestionDataSource(dataSources);
                 break;
             }
             case DataSourceType.None:
@@ -80,6 +76,20 @@ internal static class ServiceCollectionExtensions
             case DataSourceType.None:
             {
                 services.TryAddSingleton<IForecastDataSource, NullForecastDataSource>();
+                break;
+            }
+        }
+
+        switch(congestionDataSource)
+        {
+            case DataSourceType.Entsoe:
+            {
+                services.AddEntsoeCongestionDataSource(dataSources);
+                break;
+            }
+            case DataSourceType.None:
+            {
+                services.TryAddSingleton<ICongestionDataSource, NullCongestionDataSource>();
                 break;
             }
         }

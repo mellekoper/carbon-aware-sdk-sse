@@ -44,6 +44,7 @@ try
 {
     builder.Services.AddEmissionsServices(builder.Configuration);
     builder.Services.AddForecastServices(builder.Configuration);
+    builder.Services.AddCongestionServices(builder.Configuration);
 } catch(CarbonAwareException e)
 {
     successfulServices = false;
