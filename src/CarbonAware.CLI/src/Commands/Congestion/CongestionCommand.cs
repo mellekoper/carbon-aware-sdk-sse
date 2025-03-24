@@ -91,7 +91,7 @@ class CongestionCommand : Command
         {
             parameters.MultipleLocations = locations;
 
-            var results = await congestionHandler.GetCongestionDataAsync(parameters.MultipleLocations!, parameters.Start, parameters.End);
+            var results = await congestionHandler.GetBestCongestionDataAsync(parameters.MultipleLocations!, parameters.Start, parameters.End);
 
             congestion = results.Select(congestion => (CongestionDataDTO)congestion).ToList();
         }
@@ -103,8 +103,8 @@ class CongestionCommand : Command
 
                 var averageCongestion = await congestionHandler.GetAverageCongestionAsync(
                     parameters.SingleLocation!,
-                    (DateTimeOffset)parameters.Start!,
-                    (DateTimeOffset)parameters.End!);
+                    parameters.Start,
+                    parameters.End);
                 
                 // If startTime or endTime were not provided, the handler would have thrown an error as startTime and endTime are required and validated in it. So, at this point it is safe to assume that the start/end values are not null. 
                 var congestionData = new CongestionDataDTO()
@@ -112,7 +112,9 @@ class CongestionCommand : Command
                     Location = location,
                     Time = startTime,
                     Duration = endTime - startTime,
-                    Difference = averageCongestion
+                    Load = (int)averageCongestion.Item1,
+                    Generation = (int)averageCongestion.Item2,
+                    Difference = (int)averageCongestion.Item3,
                 };
                 congestion.Add(congestionData);
             }

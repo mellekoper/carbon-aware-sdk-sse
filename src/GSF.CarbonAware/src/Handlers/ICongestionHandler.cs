@@ -46,6 +46,6 @@ namespace GSF.CarbonAware.Handlers
         /// <param name="start">The time at which the workflow we are measuring carbon intensity for started (ex: 2022-03-01T15:30:00Z)</param>
         /// <param name="end">The time at which the workflow we are measuring carbon intensity for ended (ex: 2022-03-01T18:30:00Z)</param>
         /// <returns>The average carbon intensity value.</returns>
-        Task<double> GetAverageCongestionAsync(string location, DateTimeOffset start, DateTimeOffset end);
+        Task<(double, double, double)> GetAverageCongestionAsync(string location, DateTimeOffset? start, DateTimeOffset? end);
     }
 }

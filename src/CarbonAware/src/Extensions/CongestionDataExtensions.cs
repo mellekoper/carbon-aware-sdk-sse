@@ -144,48 +144,23 @@ internal static class CongestionDataExtensions
     /// <param name="endTime">The end time of the data to be averaged.</param>
     /// <returns>The average difference of the data for the specified time period</returns>
     /// <exception cref="InvalidOperationException">Can be thrown if the congestion data is not a continuous, chronological time-series.</exception>
-    public static double AverageOverPeriod(this IEnumerable<CongestionData> data, DateTimeOffset startTime, DateTimeOffset endTime)
+    public static (double, double, double) AverageOverPeriod(this IEnumerable<CongestionData> data, DateTimeOffset startTime, DateTimeOffset endTime)
     {
         double difference = 0.0;
+        double load = 0.0;
+        double generation = 0.0;
         TimeSpan totalDuration = endTime - startTime;
-        CongestionData? previous = null;
-        (bool reverseChronology, bool emptyEnumerable) = GetChronologyDetails(data);
-        bool startTimeCoverage = false;
-        bool endTimeCoverage = false;
-
-        if (emptyEnumerable)
-        {
-            return difference;
-        }
-
+        int count = 0;
         foreach (var current in data)
         {
-            var currentEndTime = current.Time + current.Duration;
+            difference += current.Difference;
+            load += current.Load;
+            generation += current.Generation;
 
-            if (previous != null && !IsContinuousChronological(current, previous, reverseChronology))
-            {
-                var previousEndTime = previous.Time + previous.Duration;
-                throw new InvalidOperationException($"AverageOverPeriod requires continuous chronological data. Previous point covered {previous.Time} through {previousEndTime}; Current point covers {current.Time} through {currentEndTime}.");
-            }
+            count += 1;
+        }    
 
-            if (currentEndTime > startTime && current.Time < endTime)
-            {
-                var lowerBound = (startTime >= current.Time) ? startTime : current.Time;
-                var upperBound = (endTime < currentEndTime) ? endTime : currentEndTime;
-                difference += current.Difference * (upperBound - lowerBound) / totalDuration;
-            }
-
-            startTimeCoverage = startTimeCoverage ? startTimeCoverage : (startTime >= current.Time && startTime < currentEndTime);
-            endTimeCoverage = endTimeCoverage ? endTimeCoverage : (endTime <= currentEndTime && endTime > current.Time);
-            previous = current;
-        }
-
-        if (!startTimeCoverage || !endTimeCoverage)
-        {
-            throw new ArgumentException($"Period out of range. Data points did not cover the requested average period: {startTime} through {endTime}");
-        }
-
-        return difference;
+        return (load / count, difference / count, generation / count);
     }
 
     private static (bool reverseChronology, bool emptyEnumerable) GetChronologyDetails(IEnumerable<CongestionData> data)

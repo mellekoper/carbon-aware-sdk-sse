@@ -387,6 +387,7 @@ internal static class CarbonAwareOptimalCongestion
         }
 
         var bestResult = congestionData.MaxBy(x => x.Difference);
+        Console.WriteLine("Best result: ", bestResult);
 
         IEnumerable<global::CarbonAware.Model.CongestionData> results = Array.Empty<global::CarbonAware.Model.CongestionData>();
 
